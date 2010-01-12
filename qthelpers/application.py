@@ -8,7 +8,6 @@ from PyQt4 import QtGui, QtCore
 
 from .globals import app
 from . import i18n
-from .i18n import findTranslationResources, getTranslationFileName, getCurrentLanguage
 
 
 def fillSettings(data):
@@ -50,17 +49,17 @@ class Application(QtGui.QApplication):
 
 		# get current language; if it is None, use current locale
 
-		lang_from_config = getCurrentLanguage()
+		lang_from_config = i18n.getCurrentLanguage()
 		if lang_from_config is None:
 			locale = QtCore.QLocale.system()
 
 			# load most suitable translation
-			if not translator.load(getTranslationFileName(locale), ":/"):
+			if not translator.load(i18n.getTranslationFileName(locale), ":/"):
 				error("Failed to find suitable translation file for current locale ("
 					+ locale.name() + ")")
 		else:
 			translations = {}
-			for locale_name, _, full_path in findTranslationResources():
+			for locale_name, _, full_path in i18n.findTranslationResources():
 				translations[locale_name] = full_path
 
 			# load translation file
