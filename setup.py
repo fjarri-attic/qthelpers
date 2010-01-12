@@ -9,6 +9,7 @@ except ImportError:
 from qthelpers import VERSION
 
 setup(
+        name='qthelpers',
 	packages=['qthelpers'],
 	version=VERSION,
 	author='Bogdan Opanchuk',
