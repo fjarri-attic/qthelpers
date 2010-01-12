@@ -2,8 +2,11 @@
 Object, encapsulating build procedures for PyQt project
 """
 
+from PyQt4 import QtCore
+
 import os
 import os.path
+import shutil
 import sys
 from subprocess import Popen
 
@@ -25,9 +28,10 @@ def pyResourceFileName():
 
 class QtProject:
 
-	def __init__(self, app_dir, sources=None):
+	def __init__(self, app_dir, sources=None, default_locale=None):
 		self._app_dir = app_dir
 		self._sources = sources
+		self._default_locale = default_locale
 
 	def _createProjectFile(self, sources, translations):
 		contents = _fileListVariable("SOURCES", sources) + "\n" + \
@@ -77,6 +81,16 @@ class QtProject:
 	def build(self):
 		sources = self._getSourcesList()
 		translations = i18n.findTranslationFiles(self._app_dir)
+
+		if self._default_locale is not None:
+			locale = QtCore.QLocale(self._default_locale)
+			file_name = i18n.getTranslationFileName(locale)
+			if file_name in translations:
+				src = os.path.join(self._app_dir, file_name + ".ts")
+				dst_name = i18n.getTranslationFileName()
+				shutil.copyfile(src, dst_name + ".ts")
+				translations.append(dst_name)
+
 		self._createProjectFile(sources, translations)
 		self._createResourceFile(translations)
 		self._buildResources()

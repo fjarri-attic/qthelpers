@@ -148,9 +148,16 @@ def _getLocaleInfo(locale):
 
 	return locale_name, full_name
 
-def getTranslationFileName(locale, ext=None):
-	locale_name, _ = _getLocaleInfo(locale)
-	return _TS_NAME_BASE + "." + locale_name.lower() + ('.' + ext if ext is not None else '')
+def getTranslationFileName(locale=None, ext=None):
+	if locale is not None:
+		locale_name, _ = _getLocaleInfo(locale)
+		if locale_name == _QT_UNKNOWN_LOCALE:
+			locale_name = None
+	else:
+		locale_name = None
+	return _TS_NAME_BASE + \
+		('.' + locale_name.lower() if locale_name is not None else '') + \
+		('.' + ext if ext is not None else '')
 
 def findTranslationFiles(app_dir):
 	info("Looking for translation files...")
@@ -170,7 +177,7 @@ def findTranslationFiles(app_dir):
 	if len(found) == 0:
 		warning("No translations found.")
 
-	return [_getTranslationFileName(locale) for locale in found]
+	return [getTranslationFileName(locale) for locale in found]
 
 def findTranslationResources():
 	"""
