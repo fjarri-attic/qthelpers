@@ -138,7 +138,7 @@ def _parseTranslationFileName(file_name, filter_ext=None):
 	return locale
 
 def _getLocaleInfo(locale):
-	locale_name = locale.name()
+	locale_name = str(locale.name())
 	if locale_name != _QT_UNKNOWN_LOCALE:
 		country_name = QtCore.QLocale.countryToString(locale.country())
 		language_name = QtCore.QLocale.languageToString(locale.language())
