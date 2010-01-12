@@ -201,6 +201,7 @@ def findTranslationResources():
 			# theoretically, this should not happen, because these files 
 			# have already passed through findTranslationFiles()
 			warning("Failed to parse translation file name: " + file_name)
+			continue
 
 		if not translator.load(resource_path):
 			warning("Failed to load translation file " + resource_path)
