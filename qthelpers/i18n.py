@@ -97,7 +97,13 @@ def setLanguage(locale_name):
 	app.inst.postEvent(app.inst, event)
 
 def getCurrentLanguage():
-	return app.settings.value(_LANGUAGE_SETTING)
+	val = app.settings.value(_LANGUAGE_SETTING)
+
+	# for py2.6 val is QVariant; for py3k val is of some Python type
+	if isinstance(val, QtCore.QVariant):
+		return None if val.isNull() else val.toString()
+	else:
+		return val
 
 def ensureLanguageSetting():
 	if not app.settings.contains(_LANGUAGE_SETTING):
@@ -196,7 +202,7 @@ def findTranslationResources():
 		resource_path = translations_dir.filePath(file_name)
 
 		try:
-			locale = _parseTranslationFileName(file_name)
+			locale = _parseTranslationFileName(str(file_name))
 		except:
 			# theoretically, this should not happen, because these files 
 			# have already passed through findTranslationFiles()
