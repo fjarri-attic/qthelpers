@@ -76,7 +76,7 @@ class QtProject:
 
 		major, minor, micro, releaselevel, serial = sys.version_info
 		_execute(["pyrcc4", _RESOURCE_FILE, "-o", pyResourceFileName() + ".py"] +
-			["-py3"] if major == 3 else [])
+			(["-py3"] if major == 3 else []))
 
 	def build(self):
 		sources = self._getSourcesList()
